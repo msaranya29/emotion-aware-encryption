@@ -1,0 +1,586 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>Emotion-Aware Encryption System</title>
+  <meta name="description" content="A production-style system combining NLP emotion detection with AES encryption." />
+  <link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700&family=JetBrains+Mono:wght@400;600&display=swap" rel="stylesheet" />
+  <style>
+    *, *::before, *::after { box-sizing: border-box; margin: 0; padding: 0; }
+
+    :root {
+      --bg:         #090d1a;
+      --surface:    #111827;
+      --glass:      rgba(255,255,255,0.04);
+      --border:     rgba(255,255,255,0.08);
+      --primary:    #7c3aed;
+      --primary-glow: rgba(124,58,237,0.35);
+      --cyan:       #06b6d4;
+      --cyan-glow:  rgba(6,182,212,0.25);
+      --green:      #10b981;
+      --red:        #ef4444;
+      --yellow:     #f59e0b;
+      --text:       #f1f5f9;
+      --muted:      #64748b;
+      --radius:     16px;
+    }
+
+    html { scroll-behavior: smooth; }
+
+    body {
+      font-family: 'Inter', sans-serif;
+      background: var(--bg);
+      color: var(--text);
+      min-height: 100vh;
+      overflow-x: hidden;
+    }
+
+    /* ── Animated background ── */
+    body::before {
+      content: '';
+      position: fixed; inset: 0; z-index: 0;
+      background:
+        radial-gradient(ellipse 80% 60% at 10% 20%, rgba(124,58,237,0.12) 0%, transparent 60%),
+        radial-gradient(ellipse 60% 50% at 90% 80%, rgba(6,182,212,0.10) 0%, transparent 60%);
+      pointer-events: none;
+    }
+
+    /* ── Particles canvas ── */
+    #particles { position: fixed; inset: 0; z-index: 0; pointer-events: none; }
+
+    /* ── Layout ── */
+    .wrapper { position: relative; z-index: 1; max-width: 1200px; margin: 0 auto; padding: 0 24px 80px; }
+
+    /* ── Header ── */
+    header {
+      text-align: center;
+      padding: 60px 0 48px;
+    }
+    .logo-badge {
+      display: inline-flex; align-items: center; gap: 10px;
+      background: var(--glass);
+      border: 1px solid var(--border);
+      border-radius: 50px;
+      padding: 8px 20px;
+      font-size: 13px; font-weight: 500; color: var(--cyan);
+      margin-bottom: 24px;
+      backdrop-filter: blur(12px);
+      animation: fadeDown 0.6s ease both;
+    }
+    .logo-badge svg { width: 16px; height: 16px; }
+    header h1 {
+      font-size: clamp(2rem, 5vw, 3.4rem);
+      font-weight: 700;
+      line-height: 1.15;
+      background: linear-gradient(135deg, #fff 30%, var(--cyan) 70%, var(--primary) 100%);
+      -webkit-background-clip: text; -webkit-text-fill-color: transparent;
+      background-clip: text;
+      animation: fadeDown 0.7s ease both;
+    }
+    header p {
+      margin-top: 16px; max-width: 560px; margin-inline: auto;
+      color: var(--muted); font-size: 1.05rem; line-height: 1.7;
+      animation: fadeDown 0.8s ease both;
+    }
+
+    /* ── Grid ── */
+    .grid { display: grid; grid-template-columns: 1fr 1fr; gap: 24px; margin-top: 40px; }
+    @media (max-width: 800px) { .grid { grid-template-columns: 1fr; } }
+
+    /* ── Card ── */
+    .card {
+      background: var(--glass);
+      border: 1px solid var(--border);
+      border-radius: var(--radius);
+      padding: 28px;
+      backdrop-filter: blur(16px);
+      transition: border-color 0.3s, box-shadow 0.3s;
+      animation: fadeUp 0.6s ease both;
+    }
+    .card:hover { border-color: rgba(124,58,237,0.35); box-shadow: 0 0 40px var(--primary-glow); }
+    .card.full { grid-column: 1 / -1; }
+
+    .card-header {
+      display: flex; align-items: center; gap: 12px;
+      margin-bottom: 22px;
+    }
+    .card-icon {
+      width: 40px; height: 40px; border-radius: 10px;
+      display: flex; align-items: center; justify-content: center;
+      font-size: 18px;
+    }
+    .icon-purple { background: rgba(124,58,237,0.2); }
+    .icon-cyan   { background: rgba(6,182,212,0.2); }
+    .icon-green  { background: rgba(16,185,129,0.2); }
+
+    .card-header h2 { font-size: 1rem; font-weight: 600; }
+    .card-header p  { font-size: 0.8rem; color: var(--muted); margin-top: 2px; }
+
+    /* ── Form Elements ── */
+    textarea, input[type="text"] {
+      width: 100%; background: rgba(0,0,0,0.3);
+      border: 1px solid var(--border); border-radius: 10px;
+      color: var(--text); font-family: 'Inter', sans-serif; font-size: 0.95rem;
+      padding: 14px 16px; resize: vertical; outline: none;
+      transition: border-color 0.25s, box-shadow 0.25s;
+    }
+    textarea:focus, input[type="text"]:focus {
+      border-color: var(--primary);
+      box-shadow: 0 0 0 3px var(--primary-glow);
+    }
+    textarea { min-height: 120px; }
+
+    /* ── Button ── */
+    .btn {
+      display: inline-flex; align-items: center; gap: 8px;
+      padding: 12px 24px; border-radius: 10px; border: none;
+      font-family: 'Inter', sans-serif; font-size: 0.9rem; font-weight: 600;
+      cursor: pointer; transition: all 0.2s; user-select: none;
+    }
+    .btn-primary {
+      background: linear-gradient(135deg, var(--primary), #5b21b6);
+      color: #fff;
+      box-shadow: 0 4px 20px var(--primary-glow);
+    }
+    .btn-primary:hover { transform: translateY(-2px); box-shadow: 0 8px 30px var(--primary-glow); }
+    .btn-primary:active { transform: translateY(0); }
+    .btn-cyan {
+      background: linear-gradient(135deg, var(--cyan), #0e7490);
+      color: #fff;
+      box-shadow: 0 4px 20px var(--cyan-glow);
+    }
+    .btn-cyan:hover { transform: translateY(-2px); box-shadow: 0 8px 30px var(--cyan-glow); }
+    .btn-outline {
+      background: transparent; color: var(--muted);
+      border: 1px solid var(--border);
+    }
+    .btn-outline:hover { border-color: var(--primary); color: var(--text); }
+    .btn:disabled { opacity: 0.5; cursor: not-allowed; transform: none !important; }
+
+    .btn-row { display: flex; gap: 10px; margin-top: 16px; flex-wrap: wrap; }
+
+    /* ── Spinner ── */
+    .spinner {
+      width: 16px; height: 16px; border-radius: 50%;
+      border: 2px solid rgba(255,255,255,0.3);
+      border-top-color: #fff; animation: spin 0.7s linear infinite;
+      display: none;
+    }
+    .btn.loading .spinner { display: block; }
+    .btn.loading .btn-label { display: none; }
+
+    /* ── Result Panel ── */
+    .result-panel {
+      margin-top: 20px; border-radius: 12px; overflow: hidden;
+      border: 1px solid var(--border);
+      display: none;
+    }
+    .result-panel.visible { display: block; animation: fadeUp 0.4s ease; }
+
+    /* Emotion chip */
+    .emotion-row {
+      display: flex; align-items: center; gap: 14px;
+      padding: 18px 20px; background: rgba(0,0,0,0.25);
+      border-bottom: 1px solid var(--border);
+    }
+    .emotion-emoji { font-size: 2rem; }
+    .emotion-label { font-size: 1.25rem; font-weight: 700; text-transform: capitalize; }
+    .emotion-sublabel { font-size: 0.78rem; color: var(--muted); margin-top: 2px; }
+
+    /* Confidence bar */
+    .conf-section { padding: 14px 20px; border-bottom: 1px solid var(--border); }
+    .conf-label { display: flex; justify-content: space-between; font-size: 0.8rem; color: var(--muted); margin-bottom: 8px; }
+    .conf-bar { height: 8px; border-radius: 99px; background: rgba(255,255,255,0.08); overflow: hidden; }
+    .conf-fill { height: 100%; border-radius: 99px; background: linear-gradient(90deg, var(--primary), var(--cyan)); transition: width 1s cubic-bezier(.22,1,.36,1); width: 0; }
+
+    /* Encrypted text */
+    .enc-section { padding: 14px 20px; }
+    .enc-label { font-size: 0.78rem; color: var(--muted); margin-bottom: 8px; display: flex; align-items: center; justify-content: space-between; }
+    .enc-text {
+      font-family: 'JetBrains Mono', monospace; font-size: 0.78rem;
+      color: #4ade80; word-break: break-all;
+      background: rgba(0,0,0,0.3); border-radius: 8px; padding: 12px;
+      max-height: 100px; overflow-y: auto;
+      scrollbar-width: thin; scrollbar-color: var(--primary) transparent;
+    }
+    .copy-btn {
+      background: none; border: 1px solid var(--border); border-radius: 6px;
+      color: var(--muted); font-size: 11px; padding: 3px 8px; cursor: pointer;
+      transition: all 0.2s;
+    }
+    .copy-btn:hover { border-color: var(--cyan); color: var(--cyan); }
+
+    /* ── Decrypt result ── */
+    .decrypt-result {
+      margin-top: 20px; padding: 18px; border-radius: 12px;
+      background: rgba(16,185,129,0.08); border: 1px solid rgba(16,185,129,0.25);
+      display: none;
+    }
+    .decrypt-result.visible { display: block; animation: fadeUp 0.4s ease; }
+    .decrypt-result .orig { font-size: 1rem; font-weight: 500; margin-bottom: 12px; }
+    .decrypt-meta { display: flex; gap: 12px; flex-wrap: wrap; }
+    .meta-chip {
+      background: rgba(255,255,255,0.07); border-radius: 8px;
+      padding: 6px 14px; font-size: 0.82rem; border: 1px solid var(--border);
+    }
+    .meta-chip span { color: var(--muted); margin-right: 4px; }
+
+    /* ── Stats ── */
+    .stats-grid { display: grid; gap: 10px; margin-top: 4px; }
+    .stat-row { display: flex; align-items: center; gap: 12px; }
+    .stat-name { width: 90px; font-size: 0.82rem; text-transform: capitalize; }
+    .stat-bar-wrap { flex: 1; height: 10px; background: rgba(255,255,255,0.07); border-radius: 99px; overflow: hidden; }
+    .stat-bar { height: 100%; border-radius: 99px; transition: width 1.2s cubic-bezier(.22,1,.36,1); }
+    .stat-count { font-size: 0.82rem; color: var(--muted); width: 28px; text-align: right; }
+
+    .no-data { color: var(--muted); font-size: 0.9rem; text-align: center; padding: 30px 0; }
+
+    /* ── Error toast ── */
+    #toast {
+      position: fixed; bottom: 30px; right: 30px; z-index: 999;
+      background: rgba(239,68,68,0.15); border: 1px solid rgba(239,68,68,0.4);
+      color: #fca5a5; border-radius: 12px; padding: 14px 20px;
+      font-size: 0.88rem; max-width: 340px;
+      backdrop-filter: blur(16px);
+      transform: translateY(80px); opacity: 0;
+      transition: all 0.4s cubic-bezier(.22,1,.36,1);
+      pointer-events: none;
+    }
+    #toast.show { transform: translateY(0); opacity: 1; }
+
+    /* ── Animations ── */
+    @keyframes fadeDown {
+      from { opacity: 0; transform: translateY(-16px); }
+      to   { opacity: 1; transform: translateY(0); }
+    }
+    @keyframes fadeUp {
+      from { opacity: 0; transform: translateY(16px); }
+      to   { opacity: 1; transform: translateY(0); }
+    }
+    @keyframes spin { to { transform: rotate(360deg); } }
+
+    /* ── Emotion colour map ── */
+    .e-joy      { color: #f59e0b; }
+    .e-sadness  { color: #60a5fa; }
+    .e-anger    { color: #f87171; }
+    .e-anxiety  { color: #a78bfa; }
+    .e-surprise { color: #34d399; }
+    .e-unknown  { color: var(--muted); }
+
+    .bar-joy      { background: linear-gradient(90deg,#f59e0b,#fbbf24); }
+    .bar-sadness  { background: linear-gradient(90deg,#3b82f6,#60a5fa); }
+    .bar-anger    { background: linear-gradient(90deg,#ef4444,#f87171); }
+    .bar-anxiety  { background: linear-gradient(90deg,#7c3aed,#a78bfa); }
+    .bar-surprise { background: linear-gradient(90deg,#059669,#34d399); }
+    .bar-default  { background: linear-gradient(90deg,var(--primary),var(--cyan)); }
+  </style>
+</head>
+<body>
+
+<canvas id="particles"></canvas>
+
+<div class="wrapper">
+  <!-- Header -->
+  <header>
+    <div class="logo-badge">
+      <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+        <path d="M12 22s8-4 8-10V5l-8-3-8 3v7c0 6 8 10 8 10z"/>
+      </svg>
+      Emotion-Aware Encryption System
+    </div>
+    <h1>Feel. Encrypt. Protect.</h1>
+    <p>NLP emotion intelligence meets AES-256 encryption. Your words are analyzed, understood, and secured — in one step.</p>
+  </header>
+
+  <div class="grid">
+    <!-- ── Card 1: Submit ── -->
+    <div class="card" style="animation-delay:0.1s">
+      <div class="card-header">
+        <div class="card-icon icon-purple">🧠</div>
+        <div>
+          <h2>Analyze & Encrypt</h2>
+          <p>Detect emotion and encrypt your text</p>
+        </div>
+      </div>
+
+      <textarea id="inputText" placeholder="Type how you're feeling… e.g. 'I feel anxious about tomorrow'" rows="5"></textarea>
+
+      <div class="btn-row">
+        <button id="submitBtn" class="btn btn-primary" onclick="handleSubmit()">
+          <span class="btn-label">✦ Analyze &amp; Encrypt</span>
+          <div class="spinner"></div>
+        </button>
+        <button class="btn btn-outline" onclick="document.getElementById('inputText').value='';hideResult('submitResult')">Clear</button>
+      </div>
+
+      <!-- Result -->
+      <div class="result-panel" id="submitResult">
+        <div class="emotion-row">
+          <div class="emotion-emoji" id="resEmoji">😐</div>
+          <div>
+            <div class="emotion-label" id="resEmotion">—</div>
+            <div class="emotion-sublabel">Detected Emotion</div>
+          </div>
+        </div>
+        <div class="conf-section">
+          <div class="conf-label">
+            <span>Confidence</span>
+            <span id="resConf">—</span>
+          </div>
+          <div class="conf-bar"><div class="conf-fill" id="confFill"></div></div>
+        </div>
+        <div class="enc-section">
+          <div class="enc-label">
+            <span>🔐 Encrypted Payload (AES-256)</span>
+            <button class="copy-btn" onclick="copyEnc()">Copy</button>
+          </div>
+          <div class="enc-text" id="resEncText">—</div>
+        </div>
+      </div>
+    </div>
+
+    <!-- ── Card 2: Decrypt ── -->
+    <div class="card" style="animation-delay:0.2s">
+      <div class="card-header">
+        <div class="card-icon icon-cyan">🔑</div>
+        <div>
+          <h2>Decrypt Message</h2>
+          <p>Paste an encrypted token to recover original text</p>
+        </div>
+      </div>
+
+      <input type="text" id="decryptInput" placeholder="Paste encrypted token here…" />
+
+      <div class="btn-row">
+        <button id="decryptBtn" class="btn btn-cyan" onclick="handleDecrypt()">
+          <span class="btn-label">🔓 Decrypt</span>
+          <div class="spinner"></div>
+        </button>
+        <button class="btn btn-outline" onclick="document.getElementById('decryptInput').value='';hideResult('decryptResult')">Clear</button>
+      </div>
+
+      <div class="decrypt-result" id="decryptResult">
+        <div class="orig" id="decOrigText">—</div>
+        <div class="decrypt-meta">
+          <div class="meta-chip"><span>Emotion:</span><strong id="decEmotion">—</strong></div>
+          <div class="meta-chip"><span>Confidence:</span><strong id="decConf">—</strong></div>
+        </div>
+      </div>
+    </div>
+
+    <!-- ── Card 3: Stats ── -->
+    <div class="card full" style="animation-delay:0.3s">
+      <div class="card-header">
+        <div class="card-icon icon-green">📊</div>
+        <div>
+          <h2>Emotion Distribution</h2>
+          <p>Live statistics from the encrypted message store</p>
+        </div>
+        <button class="btn btn-outline" style="margin-left:auto;padding:8px 16px;font-size:0.82rem" onclick="loadStats()">↻ Refresh</button>
+      </div>
+      <div id="statsContainer" class="stats-grid">
+        <p class="no-data">No data yet — submit a message to get started.</p>
+      </div>
+    </div>
+  </div>
+</div>
+
+<!-- Toast -->
+<div id="toast"></div>
+
+<script>
+  /* ─────────────────────────────────────────
+     CONFIG — change if your server is different
+  ───────────────────────────────────────── */
+  const API = 'http://127.0.0.1:8000';
+
+  /* ── Emotion map ── */
+  const EMOJI_MAP = {
+    joy:      '😄', sadness:  '😢', anger:   '😠',
+    anxiety:  '😰', surprise: '😲', unknown: '❓'
+  };
+  const emotionKey = e => Object.keys(EMOJI_MAP).find(k => e?.includes(k)) || 'unknown';
+
+  /* ── Utility ── */
+  function showToast(msg) {
+    const t = document.getElementById('toast');
+    t.textContent = msg; t.classList.add('show');
+    setTimeout(() => t.classList.remove('show'), 4000);
+  }
+  function setLoading(btnId, on) {
+    const b = document.getElementById(btnId);
+    b.classList.toggle('loading', on);
+    b.disabled = on;
+  }
+  function hideResult(id) {
+    document.getElementById(id).classList.remove('visible');
+  }
+
+  /* ── Submit & Encrypt ── */
+  async function handleSubmit() {
+    const text = document.getElementById('inputText').value.trim();
+    if (!text) { showToast('⚠ Please enter some text first.'); return; }
+    setLoading('submitBtn', true);
+    try {
+      const res = await fetch(`${API}/submit`, {
+        method: 'POST',
+        headers: { 'Content-Type': 'application/json' },
+        body: JSON.stringify({ text })
+      });
+      if (!res.ok) throw new Error((await res.json()).detail || 'Server error');
+      const data = await res.json();
+
+      // Populate result
+      const key = emotionKey(data.emotion);
+      document.getElementById('resEmoji').textContent    = EMOJI_MAP[key] || '❓';
+      document.getElementById('resEmotion').textContent  = data.emotion;
+      document.getElementById('resEmotion').className    = `emotion-label e-${key}`;
+      document.getElementById('resConf').textContent     = `${(data.confidence * 100).toFixed(1)}%`;
+      document.getElementById('resEncText').textContent  = data.encrypted_text;
+
+      // Animate confidence bar after short delay
+      document.getElementById('confFill').style.width = '0%';
+      requestAnimationFrame(() => {
+        setTimeout(() => {
+          document.getElementById('confFill').style.width = `${(data.confidence * 100).toFixed(1)}%`;
+        }, 80);
+      });
+
+      document.getElementById('submitResult').classList.add('visible');
+      loadStats(); // Auto-refresh stats
+    } catch (e) {
+      showToast(`❌ ${e.message}`);
+    } finally {
+      setLoading('submitBtn', false);
+    }
+  }
+
+  /* ── Decrypt ── */
+  async function handleDecrypt() {
+    const enc = document.getElementById('decryptInput').value.trim();
+    if (!enc) { showToast('⚠ Please paste an encrypted token.'); return; }
+    setLoading('decryptBtn', true);
+    try {
+      const res = await fetch(`${API}/decrypt`, {
+        method: 'POST',
+        headers: { 'Content-Type': 'application/json' },
+        body: JSON.stringify({ encrypted_text: enc })
+      });
+      if (!res.ok) throw new Error((await res.json()).detail || 'Decryption failed');
+      const data = await res.json();
+
+      document.getElementById('decOrigText').textContent = `"${data.original_text}"`;
+      document.getElementById('decEmotion').textContent  = data.emotion;
+      document.getElementById('decConf').textContent     = `${(data.confidence * 100).toFixed(1)}%`;
+      document.getElementById('decryptResult').classList.add('visible');
+    } catch (e) {
+      showToast(`❌ ${e.message}`);
+    } finally {
+      setLoading('decryptBtn', false);
+    }
+  }
+
+  /* ── Copy encrypted text ── */
+  function copyEnc() {
+    const txt = document.getElementById('resEncText').textContent;
+    navigator.clipboard.writeText(txt).then(() => {
+      // Also auto-fill the decrypt box for convenience
+      document.getElementById('decryptInput').value = txt;
+      const btn = document.querySelector('.copy-btn');
+      btn.textContent = '✓ Copied!';
+      setTimeout(() => btn.textContent = 'Copy', 2000);
+    });
+  }
+
+  /* ── Stats ── */
+  const BAR_COLORS = {
+    joy: 'bar-joy', sadness: 'bar-sadness', anger: 'bar-anger',
+    anxiety: 'bar-anxiety', surprise: 'bar-surprise'
+  };
+
+  async function loadStats() {
+    try {
+      const res = await fetch(`${API}/stats`);
+      if (!res.ok) throw new Error('Could not fetch stats');
+      const data = await res.json(); // [{emotion, count}]
+      const container = document.getElementById('statsContainer');
+
+      if (!data.length) {
+        container.innerHTML = '<p class="no-data">No data yet — submit a message to get started.</p>';
+        return;
+      }
+      const max = Math.max(...data.map(d => d.count));
+      container.innerHTML = data.map(d => {
+        const key   = emotionKey(d.emotion);
+        const pct   = max ? ((d.count / max) * 100).toFixed(1) : 0;
+        const cls   = BAR_COLORS[key] || 'bar-default';
+        const emoji = EMOJI_MAP[key] || '❓';
+        return `
+          <div class="stat-row">
+            <div class="stat-name">${emoji} ${d.emotion}</div>
+            <div class="stat-bar-wrap">
+              <div class="stat-bar ${cls}" style="width:0%" data-target="${pct}%"></div>
+            </div>
+            <div class="stat-count">${d.count}</div>
+          </div>`;
+      }).join('');
+
+      // Animate bars
+      requestAnimationFrame(() => {
+        setTimeout(() => {
+          document.querySelectorAll('.stat-bar').forEach(b => {
+            b.style.width = b.dataset.target;
+          });
+        }, 80);
+      });
+    } catch (e) {
+      // Silently ignore stats errors
+    }
+  }
+
+  /* ── Particle canvas ── */
+  (function particles() {
+    const canvas = document.getElementById('particles');
+    const ctx    = canvas.getContext('2d');
+    let W, H, pts = [];
+
+    function resize() {
+      W = canvas.width  = window.innerWidth;
+      H = canvas.height = window.innerHeight;
+    }
+    window.addEventListener('resize', resize);
+    resize();
+
+    for (let i = 0; i < 80; i++) {
+      pts.push({
+        x: Math.random() * (typeof W !== 'undefined' ? W : 1200),
+        y: Math.random() * (typeof H !== 'undefined' ? H : 800),
+        r: Math.random() * 1.5 + 0.3,
+        dx: (Math.random() - 0.5) * 0.3,
+        dy: (Math.random() - 0.5) * 0.3,
+        alpha: Math.random() * 0.5 + 0.1
+      });
+    }
+
+    function draw() {
+      ctx.clearRect(0, 0, W, H);
+      pts.forEach(p => {
+        p.x += p.dx; p.y += p.dy;
+        if (p.x < 0) p.x = W; if (p.x > W) p.x = 0;
+        if (p.y < 0) p.y = H; if (p.y > H) p.y = 0;
+        ctx.beginPath();
+        ctx.arc(p.x, p.y, p.r, 0, Math.PI * 2);
+        ctx.fillStyle = `rgba(124,58,237,${p.alpha})`;
+        ctx.fill();
+      });
+      requestAnimationFrame(draw);
+    }
+    draw();
+  })();
+
+  /* ── Auto-load stats on page open ── */
+  window.addEventListener('load', loadStats);
+</script>
+</body>
+</html>

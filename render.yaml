@@ -1,0 +1,13 @@
+services:
+  - type: web
+    name: emotion-aware-encryption
+    runtime: python
+    buildCommand: pip install -r requirements.txt && python model/train_model.py
+    startCommand: uvicorn app.main:app --host 0.0.0.0 --port $PORT
+    envVars:
+      - key: ENCRYPTION_KEY
+        generateValue: false   # Set this manually in the Render dashboard
+    disk:
+      name: sqlite-data
+      mountPath: /data
+      sizeGB: 1

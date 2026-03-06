@@ -1,0 +1,25 @@
+# Virtual environments
+venv/
+venv1/
+.venv/
+env/
+
+# Environment variables (NEVER commit this!)
+.env
+
+# Python cache
+__pycache__/
+*.pyc
+*.pyo
+*.pyd
+
+# Database (ephemeral on cloud)
+*.db
+
+# IDE
+.vscode/
+.idea/
+
+# OS
+.DS_Store
+Thumbs.db
