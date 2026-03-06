@@ -3,7 +3,7 @@ from datetime import datetime
 from fastapi import FastAPI, Depends, HTTPException
 from fastapi.middleware.cors import CORSMiddleware
 from fastapi.staticfiles import StaticFiles
-from fastapi.responses import FileResponse
+from fastapi.responses import FileResponse, Response
 from pydantic import BaseModel, Field
 from typing import List, Optional
 import sqlalchemy
@@ -180,10 +180,19 @@ def get_stats(db: sqlalchemy.orm.Session = Depends(get_db)):
         
     return [{"emotion": r[0], "count": r[1]} for r in results]
 
-@app.get("/")
+@app.get("/health")
+def health_check():
+    """
+    Render / uptime-robot health probe. Must return 2xx.
+    """
+    return {"status": "ok"}
+
+
+@app.api_route("/", methods=["GET", "HEAD"])
 def read_root():
     """
     Serves the frontend UI if available; otherwise returns a JSON welcome message.
+    Handles HEAD requests so Render's port-scanner sees a 200, not a 405.
     """
     index_path = os.path.join(FRONTEND_DIR, "index.html")
     if os.path.isfile(index_path):
