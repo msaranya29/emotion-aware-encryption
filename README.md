@@ -36,7 +36,7 @@ This system takes plaintext input, runs a TF-IDF Logistic Regression NLP model t
    `pip install -r requirements.txt`
 
 2. **Set up the .env file:**
-   The project requires an `ENCRYPTION_KEY`. Ensure `.env` contains a valid Fernet key. (Already done for you: `ENCRYPTION_KEY="w9jFo_qhesDXhtYYFZcrkvXpClD_-hbkplMuYqUihUU="`)
+   The project requires an `ENCRYPTION_KEY`. Ensure `.env` contains a valid Fernet key. (Already done for you: `ENCRYPTION_KEY=""`)
 
 3. **Train the ML model:**
    `cd model`
