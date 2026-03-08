@@ -1,4 +1,4 @@
-from sqlalchemy import create_engine, Column, Integer, String, Float, DateTime
+from sqlalchemy import create_engine, Column, Integer, String, Float, DateTime, Text
 from sqlalchemy.orm import declarative_base, sessionmaker
 from datetime import datetime
 import os
@@ -18,14 +18,23 @@ Base = declarative_base()
 class DBMessage(Base):
     """
     Stores only the encrypted text. Plaintext is NEVER stored here.
-    Emotional metadata is kept for analytics and system functionality.
+    Emotional metadata is kept for analytics, multi-emotion support, and
+    system functionality (decryption lookup).
+    
+    Schema:
+    - encrypted_text: The AES-256 Fernet ciphertext wrapped with EMOSIG format
+    - emotion: The emotional signature string e.g. "Joy + Anxiety"
+    - confidence: Primary emotion confidence score (0.0 - 1.0)
+    - emotions_json: JSON array of all detected emotions with scores
+    - timestamp: UTC datetime of ingestion
     """
     __tablename__ = "messages"
 
     id = Column(Integer, primary_key=True, index=True)
-    encrypted_text = Column(String, index=True)
-    emotion = Column(String, index=True)
+    encrypted_text = Column(String, index=True, unique=True)
+    emotion = Column(String, index=True)          # Full signature e.g. "Joy + Anxiety"
     confidence = Column(Float)
+    emotions_json = Column(Text, nullable=True)   # JSON: [{emotion, confidence, emoji, color}]
     timestamp = Column(DateTime, default=datetime.utcnow)
 
 def init_db():

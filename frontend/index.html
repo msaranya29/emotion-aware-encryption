@@ -1,32 +1,52 @@
 <!DOCTYPE html>
 <html lang="en">
+
 <head>
   <meta charset="UTF-8" />
   <meta name="viewport" content="width=device-width, initial-scale=1.0" />
-  <title>Emotion-Aware Encryption System</title>
-  <meta name="description" content="A production-style system combining NLP emotion detection with AES encryption." />
-  <link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700&family=JetBrains+Mono:wght@400;600&display=swap" rel="stylesheet" />
+  <title>mini Emotion Cipher — Feel. Encrypt. Protect.</title>
+  <meta name="description"
+    content="Emotion-Aware Encryption: Detect the emotional signature of your text and protect it with AES-256. Words stay private, feelings stay readable." />
+  <link
+    href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700;800&family=JetBrains+Mono:wght@400;600&display=swap"
+    rel="stylesheet" />
   <style>
-    *, *::before, *::after { box-sizing: border-box; margin: 0; padding: 0; }
-
-    :root {
-      --bg:         #090d1a;
-      --surface:    #111827;
-      --glass:      rgba(255,255,255,0.04);
-      --border:     rgba(255,255,255,0.08);
-      --primary:    #7c3aed;
-      --primary-glow: rgba(124,58,237,0.35);
-      --cyan:       #06b6d4;
-      --cyan-glow:  rgba(6,182,212,0.25);
-      --green:      #10b981;
-      --red:        #ef4444;
-      --yellow:     #f59e0b;
-      --text:       #f1f5f9;
-      --muted:      #64748b;
-      --radius:     16px;
+    *,
+    *::before,
+    *::after {
+      box-sizing: border-box;
+      margin: 0;
+      padding: 0;
     }
 
-    html { scroll-behavior: smooth; }
+    :root {
+      --bg: #06091a;
+      --surface: #0d1530;
+      --glass: rgba(255, 255, 255, 0.04);
+      --glass-hover: rgba(255, 255, 255, 0.07);
+      --border: rgba(255, 255, 255, 0.08);
+      --border-glow: rgba(124, 58, 237, 0.4);
+      --primary: #7c3aed;
+      --primary-lt: #9d5cf6;
+      --primary-glow: rgba(124, 58, 237, 0.35);
+      --cyan: #06b6d4;
+      --cyan-lt: #22d3ee;
+      --cyan-glow: rgba(6, 182, 212, 0.25);
+      --green: #10b981;
+      --green-glow: rgba(16, 185, 129, 0.2);
+      --pink: #ec4899;
+      --amber: #f59e0b;
+      --red: #ef4444;
+      --text: #f1f5f9;
+      --text-muted: #94a3b8;
+      --text-dim: #475569;
+      --radius: 18px;
+      --radius-sm: 10px;
+    }
+
+    html {
+      scroll-behavior: smooth;
+    }
 
     body {
       font-family: 'Inter', sans-serif;
@@ -36,57 +56,212 @@
       overflow-x: hidden;
     }
 
-    /* ── Animated background ── */
+    /* ── Animated bg mesh ── */
     body::before {
       content: '';
-      position: fixed; inset: 0; z-index: 0;
+      position: fixed;
+      inset: 0;
+      z-index: 0;
       background:
-        radial-gradient(ellipse 80% 60% at 10% 20%, rgba(124,58,237,0.12) 0%, transparent 60%),
-        radial-gradient(ellipse 60% 50% at 90% 80%, rgba(6,182,212,0.10) 0%, transparent 60%);
+        radial-gradient(ellipse 90% 70% at 5% 10%, rgba(124, 58, 237, 0.13) 0%, transparent 60%),
+        radial-gradient(ellipse 70% 60% at 95% 85%, rgba(6, 182, 212, 0.10) 0%, transparent 60%),
+        radial-gradient(ellipse 50% 40% at 50% 50%, rgba(236, 72, 153, 0.05) 0%, transparent 70%);
       pointer-events: none;
     }
 
-    /* ── Particles canvas ── */
-    #particles { position: fixed; inset: 0; z-index: 0; pointer-events: none; }
+    /* ── Particle canvas ── */
+    #particles {
+      position: fixed;
+      inset: 0;
+      z-index: 0;
+      pointer-events: none;
+    }
 
     /* ── Layout ── */
-    .wrapper { position: relative; z-index: 1; max-width: 1200px; margin: 0 auto; padding: 0 24px 80px; }
-
-    /* ── Header ── */
-    header {
-      text-align: center;
-      padding: 60px 0 48px;
+    .wrapper {
+      position: relative;
+      z-index: 1;
+      max-width: 1280px;
+      margin: 0 auto;
+      padding: 0 24px 100px;
     }
-    .logo-badge {
-      display: inline-flex; align-items: center; gap: 10px;
+
+    /* ── Nav ── */
+    nav {
+      display: flex;
+      align-items: center;
+      justify-content: space-between;
+      padding: 20px 0;
+    }
+
+    .nav-brand {
+      display: inline-flex;
+      align-items: center;
+      gap: 10px;
       background: var(--glass);
       border: 1px solid var(--border);
       border-radius: 50px;
-      padding: 8px 20px;
-      font-size: 13px; font-weight: 500; color: var(--cyan);
-      margin-bottom: 24px;
+      padding: 8px 18px;
+      font-size: 13px;
+      font-weight: 600;
+      color: var(--cyan);
       backdrop-filter: blur(12px);
+      animation: fadeDown 0.5s ease both;
+    }
+
+    .nav-brand .shield-icon {
+      width: 18px;
+      height: 18px;
+    }
+
+    .nav-pill {
+      font-size: 12px;
+      color: var(--text-muted);
+      background: var(--glass);
+      border: 1px solid var(--border);
+      border-radius: 50px;
+      padding: 6px 14px;
+      backdrop-filter: blur(8px);
       animation: fadeDown 0.6s ease both;
     }
-    .logo-badge svg { width: 16px; height: 16px; }
-    header h1 {
-      font-size: clamp(2rem, 5vw, 3.4rem);
-      font-weight: 700;
-      line-height: 1.15;
-      background: linear-gradient(135deg, #fff 30%, var(--cyan) 70%, var(--primary) 100%);
-      -webkit-background-clip: text; -webkit-text-fill-color: transparent;
+
+    /* ── Hero ── */
+    .hero {
+      text-align: center;
+      padding: 60px 0 56px;
+    }
+
+    .hero-tag {
+      display: inline-flex;
+      align-items: center;
+      gap: 8px;
+      background: rgba(124, 58, 237, 0.12);
+      border: 1px solid rgba(124, 58, 237, 0.3);
+      border-radius: 50px;
+      padding: 7px 18px;
+      font-size: 12px;
+      font-weight: 600;
+      color: var(--primary-lt);
+      letter-spacing: 0.08em;
+      text-transform: uppercase;
+      margin-bottom: 28px;
+      animation: fadeDown 0.6s ease both;
+    }
+
+    .hero-tag::before {
+      content: '✦';
+    }
+
+    .hero h1 {
+      font-size: clamp(2.4rem, 5.5vw, 4rem);
+      font-weight: 800;
+      line-height: 1.1;
+      letter-spacing: -0.03em;
+      background: linear-gradient(140deg, #fff 20%, var(--cyan-lt) 55%, var(--primary-lt) 100%);
+      -webkit-background-clip: text;
+      -webkit-text-fill-color: transparent;
       background-clip: text;
       animation: fadeDown 0.7s ease both;
+      margin-bottom: 6px;
     }
-    header p {
-      margin-top: 16px; max-width: 560px; margin-inline: auto;
-      color: var(--muted); font-size: 1.05rem; line-height: 1.7;
+
+    .hero h1 .accent {
+      background: linear-gradient(140deg, var(--pink) 0%, var(--amber) 100%);
+      -webkit-background-clip: text;
+      background-clip: text;
+    }
+
+    .hero-sub {
+      margin-top: 18px;
+      max-width: 580px;
+      margin-inline: auto;
+      color: var(--text-muted);
+      font-size: 1.05rem;
+      line-height: 1.75;
       animation: fadeDown 0.8s ease both;
     }
 
-    /* ── Grid ── */
-    .grid { display: grid; grid-template-columns: 1fr 1fr; gap: 24px; margin-top: 40px; }
-    @media (max-width: 800px) { .grid { grid-template-columns: 1fr; } }
+    .hero-chips {
+      display: flex;
+      gap: 10px;
+      justify-content: center;
+      flex-wrap: wrap;
+      margin-top: 24px;
+      animation: fadeDown 0.9s ease both;
+    }
+
+    .chip {
+      background: var(--glass);
+      border: 1px solid var(--border);
+      border-radius: 50px;
+      padding: 6px 16px;
+      font-size: 12px;
+      color: var(--text-muted);
+      backdrop-filter: blur(8px);
+    }
+
+    .chip strong {
+      color: var(--text);
+    }
+
+    /* ── How it works strip ── */
+    .how-row {
+      display: flex;
+      justify-content: center;
+      align-items: center;
+      gap: 0;
+      margin: 0 auto 48px;
+      max-width: 700px;
+    }
+
+    .how-step {
+      text-align: center;
+      padding: 0 16px;
+    }
+
+    .how-icon {
+      width: 44px;
+      height: 44px;
+      border-radius: 12px;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      font-size: 20px;
+      margin: 0 auto 8px;
+    }
+
+    .how-step p {
+      font-size: 11px;
+      color: var(--text-muted);
+      line-height: 1.5;
+      max-width: 90px;
+    }
+
+    .how-step strong {
+      display: block;
+      font-size: 12px;
+      color: var(--text);
+      margin-bottom: 3px;
+    }
+
+    .how-arrow {
+      color: var(--text-dim);
+      font-size: 18px;
+      padding-bottom: 22px;
+    }
+
+    /* ── Main grid ── */
+    .main-grid {
+      display: grid;
+      grid-template-columns: 1fr 1fr;
+      gap: 20px;
+    }
+
+    @media (max-width: 860px) {
+      .main-grid {
+        grid-template-columns: 1fr;
+      }
+    }
 
     /* ── Card ── */
     .card {
@@ -94,493 +269,1252 @@
       border: 1px solid var(--border);
       border-radius: var(--radius);
       padding: 28px;
-      backdrop-filter: blur(16px);
-      transition: border-color 0.3s, box-shadow 0.3s;
-      animation: fadeUp 0.6s ease both;
+      backdrop-filter: blur(20px);
+      transition: border-color 0.35s, box-shadow 0.35s, background 0.35s;
+      animation: fadeUp 0.65s ease both;
     }
-    .card:hover { border-color: rgba(124,58,237,0.35); box-shadow: 0 0 40px var(--primary-glow); }
-    .card.full { grid-column: 1 / -1; }
 
-    .card-header {
-      display: flex; align-items: center; gap: 12px;
-      margin-bottom: 22px;
+    .card:hover {
+      background: var(--glass-hover);
+      border-color: rgba(124, 58, 237, 0.3);
+      box-shadow: 0 0 50px rgba(124, 58, 237, 0.12), 0 8px 32px rgba(0, 0, 0, 0.3);
     }
+
+    .card.full {
+      grid-column: 1 / -1;
+    }
+
+    .card-head {
+      display: flex;
+      align-items: flex-start;
+      gap: 14px;
+      margin-bottom: 24px;
+    }
+
     .card-icon {
-      width: 40px; height: 40px; border-radius: 10px;
-      display: flex; align-items: center; justify-content: center;
-      font-size: 18px;
+      width: 44px;
+      height: 44px;
+      border-radius: 12px;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      font-size: 20px;
+      flex-shrink: 0;
     }
-    .icon-purple { background: rgba(124,58,237,0.2); }
-    .icon-cyan   { background: rgba(6,182,212,0.2); }
-    .icon-green  { background: rgba(16,185,129,0.2); }
 
-    .card-header h2 { font-size: 1rem; font-weight: 600; }
-    .card-header p  { font-size: 0.8rem; color: var(--muted); margin-top: 2px; }
+    .ci-purple {
+      background: rgba(124, 58, 237, 0.2);
+      border: 1px solid rgba(124, 58, 237, 0.25);
+    }
 
-    /* ── Form Elements ── */
-    textarea, input[type="text"] {
-      width: 100%; background: rgba(0,0,0,0.3);
-      border: 1px solid var(--border); border-radius: 10px;
-      color: var(--text); font-family: 'Inter', sans-serif; font-size: 0.95rem;
-      padding: 14px 16px; resize: vertical; outline: none;
+    .ci-cyan {
+      background: rgba(6, 182, 212, 0.15);
+      border: 1px solid rgba(6, 182, 212, 0.25);
+    }
+
+    .ci-green {
+      background: rgba(16, 185, 129, 0.15);
+      border: 1px solid rgba(16, 185, 129, 0.25);
+    }
+
+    .ci-pink {
+      background: rgba(236, 72, 153, 0.15);
+      border: 1px solid rgba(236, 72, 153, 0.25);
+    }
+
+    .card-head h2 {
+      font-size: 1.05rem;
+      font-weight: 700;
+    }
+
+    .card-head p {
+      font-size: 0.8rem;
+      color: var(--text-muted);
+      margin-top: 3px;
+      line-height: 1.5;
+    }
+
+    /* ── Form ── */
+    label {
+      display: block;
+      font-size: 11px;
+      font-weight: 600;
+      color: var(--text-muted);
+      letter-spacing: 0.06em;
+      text-transform: uppercase;
+      margin-bottom: 8px;
+    }
+
+    textarea,
+    input[type="text"] {
+      width: 100%;
+      background: rgba(0, 0, 0, 0.35);
+      border: 1px solid var(--border);
+      border-radius: var(--radius-sm);
+      color: var(--text);
+      font-family: 'Inter', sans-serif;
+      font-size: 0.95rem;
+      padding: 14px 16px;
+      resize: vertical;
+      outline: none;
       transition: border-color 0.25s, box-shadow 0.25s;
+      line-height: 1.6;
     }
-    textarea:focus, input[type="text"]:focus {
+
+    textarea:focus,
+    input[type="text"]:focus {
       border-color: var(--primary);
       box-shadow: 0 0 0 3px var(--primary-glow);
     }
-    textarea { min-height: 120px; }
 
-    /* ── Button ── */
-    .btn {
-      display: inline-flex; align-items: center; gap: 8px;
-      padding: 12px 24px; border-radius: 10px; border: none;
-      font-family: 'Inter', sans-serif; font-size: 0.9rem; font-weight: 600;
-      cursor: pointer; transition: all 0.2s; user-select: none;
+    textarea {
+      min-height: 130px;
     }
+
+    .char-count {
+      font-size: 11px;
+      color: var(--text-dim);
+      text-align: right;
+      margin-top: 6px;
+    }
+
+    .char-count.warn {
+      color: var(--amber);
+    }
+
+    /* ── Buttons ── */
+    .btn {
+      display: inline-flex;
+      align-items: center;
+      gap: 8px;
+      padding: 12px 24px;
+      border-radius: var(--radius-sm);
+      border: none;
+      font-family: 'Inter', sans-serif;
+      font-size: 0.88rem;
+      font-weight: 700;
+      cursor: pointer;
+      transition: all 0.2s;
+      user-select: none;
+      letter-spacing: 0.02em;
+    }
+
     .btn-primary {
       background: linear-gradient(135deg, var(--primary), #5b21b6);
       color: #fff;
-      box-shadow: 0 4px 20px var(--primary-glow);
+      box-shadow: 0 4px 24px var(--primary-glow);
     }
-    .btn-primary:hover { transform: translateY(-2px); box-shadow: 0 8px 30px var(--primary-glow); }
-    .btn-primary:active { transform: translateY(0); }
+
+    .btn-primary:hover {
+      transform: translateY(-2px);
+      box-shadow: 0 8px 32px var(--primary-glow);
+    }
+
+    .btn-primary:active {
+      transform: translateY(0);
+    }
+
     .btn-cyan {
       background: linear-gradient(135deg, var(--cyan), #0e7490);
       color: #fff;
-      box-shadow: 0 4px 20px var(--cyan-glow);
+      box-shadow: 0 4px 24px var(--cyan-glow);
     }
-    .btn-cyan:hover { transform: translateY(-2px); box-shadow: 0 8px 30px var(--cyan-glow); }
+
+    .btn-cyan:hover {
+      transform: translateY(-2px);
+      box-shadow: 0 8px 32px var(--cyan-glow);
+    }
+
     .btn-outline {
-      background: transparent; color: var(--muted);
+      background: transparent;
+      color: var(--text-muted);
       border: 1px solid var(--border);
     }
-    .btn-outline:hover { border-color: var(--primary); color: var(--text); }
-    .btn:disabled { opacity: 0.5; cursor: not-allowed; transform: none !important; }
 
-    .btn-row { display: flex; gap: 10px; margin-top: 16px; flex-wrap: wrap; }
+    .btn-outline:hover {
+      border-color: var(--primary);
+      color: var(--text);
+    }
+
+    .btn:disabled {
+      opacity: 0.45;
+      cursor: not-allowed;
+      transform: none !important;
+    }
+
+    .btn-row {
+      display: flex;
+      gap: 10px;
+      margin-top: 16px;
+      flex-wrap: wrap;
+    }
 
     /* ── Spinner ── */
     .spinner {
-      width: 16px; height: 16px; border-radius: 50%;
-      border: 2px solid rgba(255,255,255,0.3);
-      border-top-color: #fff; animation: spin 0.7s linear infinite;
+      width: 15px;
+      height: 15px;
+      border-radius: 50%;
+      border: 2px solid rgba(255, 255, 255, 0.25);
+      border-top-color: #fff;
+      animation: spin 0.7s linear infinite;
       display: none;
     }
-    .btn.loading .spinner { display: block; }
-    .btn.loading .btn-label { display: none; }
 
-    /* ── Result Panel ── */
-    .result-panel {
-      margin-top: 20px; border-radius: 12px; overflow: hidden;
+    .btn.loading .spinner {
+      display: block;
+    }
+
+    .btn.loading .btn-label {
+      display: none;
+    }
+
+    /* ─────────────────────────────────────
+       ENCRYPT RESULT
+    ───────────────────────────────────── */
+    .enc-result {
+      margin-top: 22px;
+      border-radius: 14px;
+      overflow: hidden;
       border: 1px solid var(--border);
       display: none;
     }
-    .result-panel.visible { display: block; animation: fadeUp 0.4s ease; }
 
-    /* Emotion chip */
-    .emotion-row {
-      display: flex; align-items: center; gap: 14px;
-      padding: 18px 20px; background: rgba(0,0,0,0.25);
+    .enc-result.visible {
+      display: block;
+      animation: fadeUp 0.4s ease;
+    }
+
+    /* Emotion signature banner */
+    .sig-banner {
+      padding: 16px 20px;
+      display: flex;
+      align-items: center;
+      gap: 14px;
+      border-bottom: 1px solid var(--border);
+      position: relative;
+      overflow: hidden;
+    }
+
+    .sig-banner::before {
+      content: '';
+      position: absolute;
+      inset: 0;
+      opacity: 0.12;
+    }
+
+    .sig-emoji-stack {
+      display: flex;
+      gap: -4px;
+    }
+
+    .sig-emoji {
+      font-size: 1.8rem;
+      line-height: 1;
+    }
+
+    .sig-info {
+      flex: 1;
+    }
+
+    .sig-label {
+      font-size: 1.05rem;
+      font-weight: 700;
+      letter-spacing: -0.01em;
+    }
+
+    .sig-sublabel {
+      font-size: 0.75rem;
+      color: var(--text-muted);
+      margin-top: 3px;
+    }
+
+    /* Multi-emotion bars */
+    .emotions-section {
+      padding: 14px 20px;
       border-bottom: 1px solid var(--border);
     }
-    .emotion-emoji { font-size: 2rem; }
-    .emotion-label { font-size: 1.25rem; font-weight: 700; text-transform: capitalize; }
-    .emotion-sublabel { font-size: 0.78rem; color: var(--muted); margin-top: 2px; }
 
-    /* Confidence bar */
-    .conf-section { padding: 14px 20px; border-bottom: 1px solid var(--border); }
-    .conf-label { display: flex; justify-content: space-between; font-size: 0.8rem; color: var(--muted); margin-bottom: 8px; }
-    .conf-bar { height: 8px; border-radius: 99px; background: rgba(255,255,255,0.08); overflow: hidden; }
-    .conf-fill { height: 100%; border-radius: 99px; background: linear-gradient(90deg, var(--primary), var(--cyan)); transition: width 1s cubic-bezier(.22,1,.36,1); width: 0; }
-
-    /* Encrypted text */
-    .enc-section { padding: 14px 20px; }
-    .enc-label { font-size: 0.78rem; color: var(--muted); margin-bottom: 8px; display: flex; align-items: center; justify-content: space-between; }
-    .enc-text {
-      font-family: 'JetBrains Mono', monospace; font-size: 0.78rem;
-      color: #4ade80; word-break: break-all;
-      background: rgba(0,0,0,0.3); border-radius: 8px; padding: 12px;
-      max-height: 100px; overflow-y: auto;
-      scrollbar-width: thin; scrollbar-color: var(--primary) transparent;
+    .emotions-section h4 {
+      font-size: 10px;
+      font-weight: 700;
+      color: var(--text-muted);
+      text-transform: uppercase;
+      letter-spacing: 0.07em;
+      margin-bottom: 12px;
     }
+
+    .emo-bar-row {
+      display: flex;
+      align-items: center;
+      gap: 10px;
+      margin-bottom: 8px;
+    }
+
+    .emo-bar-row:last-child {
+      margin-bottom: 0;
+    }
+
+    .emo-name {
+      width: 100px;
+      font-size: 0.78rem;
+      font-weight: 500;
+      display: flex;
+      align-items: center;
+      gap: 6px;
+    }
+
+    .emo-bar-track {
+      flex: 1;
+      height: 8px;
+      background: rgba(255, 255, 255, 0.07);
+      border-radius: 99px;
+      overflow: hidden;
+    }
+
+    .emo-bar-fill {
+      height: 100%;
+      border-radius: 99px;
+      transition: width 1s cubic-bezier(.22, 1, .36, 1);
+      width: 0;
+    }
+
+    .emo-pct {
+      font-size: 0.75rem;
+      color: var(--text-muted);
+      width: 40px;
+      text-align: right;
+    }
+
+    /* Encrypted ciphertext */
+    .cipher-section {
+      padding: 14px 20px;
+    }
+
+    .cipher-label {
+      font-size: 0.72rem;
+      color: var(--text-muted);
+      margin-bottom: 8px;
+      display: flex;
+      align-items: center;
+      justify-content: space-between;
+    }
+
+    .cipher-label .badge {
+      background: rgba(16, 185, 129, 0.15);
+      color: var(--green);
+      border: 1px solid rgba(16, 185, 129, 0.3);
+      border-radius: 50px;
+      padding: 2px 10px;
+      font-size: 10px;
+      font-weight: 600;
+    }
+
+    .cipher-text {
+      font-family: 'JetBrains Mono', monospace;
+      font-size: 0.73rem;
+      color: #4ade80;
+      word-break: break-all;
+      background: rgba(0, 0, 0, 0.35);
+      border-radius: 8px;
+      padding: 12px;
+      max-height: 90px;
+      overflow-y: auto;
+      scrollbar-width: thin;
+      scrollbar-color: var(--primary) transparent;
+      border: 1px solid rgba(16, 185, 129, 0.12);
+    }
+
     .copy-btn {
-      background: none; border: 1px solid var(--border); border-radius: 6px;
-      color: var(--muted); font-size: 11px; padding: 3px 8px; cursor: pointer;
+      background: none;
+      border: 1px solid var(--border);
+      border-radius: 6px;
+      color: var(--text-muted);
+      font-size: 10px;
+      padding: 3px 9px;
+      cursor: pointer;
       transition: all 0.2s;
+      font-family: 'Inter', sans-serif;
     }
-    .copy-btn:hover { border-color: var(--cyan); color: var(--cyan); }
 
-    /* ── Decrypt result ── */
-    .decrypt-result {
-      margin-top: 20px; padding: 18px; border-radius: 12px;
-      background: rgba(16,185,129,0.08); border: 1px solid rgba(16,185,129,0.25);
+    .copy-btn:hover {
+      border-color: var(--cyan);
+      color: var(--cyan);
+    }
+
+    /* ─────────────────────────────────────
+       DECRYPT RESULT
+    ───────────────────────────────────── */
+    .dec-result {
+      margin-top: 22px;
+      border-radius: 14px;
+      overflow: hidden;
+      border: 1px solid rgba(16, 185, 129, 0.2);
+      background: rgba(16, 185, 129, 0.05);
       display: none;
     }
-    .decrypt-result.visible { display: block; animation: fadeUp 0.4s ease; }
-    .decrypt-result .orig { font-size: 1rem; font-weight: 500; margin-bottom: 12px; }
-    .decrypt-meta { display: flex; gap: 12px; flex-wrap: wrap; }
-    .meta-chip {
-      background: rgba(255,255,255,0.07); border-radius: 8px;
-      padding: 6px 14px; font-size: 0.82rem; border: 1px solid var(--border);
+
+    .dec-result.visible {
+      display: block;
+      animation: fadeUp 0.4s ease;
     }
-    .meta-chip span { color: var(--muted); margin-right: 4px; }
 
-    /* ── Stats ── */
-    .stats-grid { display: grid; gap: 10px; margin-top: 4px; }
-    .stat-row { display: flex; align-items: center; gap: 12px; }
-    .stat-name { width: 90px; font-size: 0.82rem; text-transform: capitalize; }
-    .stat-bar-wrap { flex: 1; height: 10px; background: rgba(255,255,255,0.07); border-radius: 99px; overflow: hidden; }
-    .stat-bar { height: 100%; border-radius: 99px; transition: width 1.2s cubic-bezier(.22,1,.36,1); }
-    .stat-count { font-size: 0.82rem; color: var(--muted); width: 28px; text-align: right; }
+    .dec-success-bar {
+      background: linear-gradient(90deg, rgba(16, 185, 129, 0.2), rgba(6, 182, 212, 0.1));
+      padding: 10px 18px;
+      font-size: 11px;
+      font-weight: 700;
+      color: var(--green);
+      letter-spacing: 0.06em;
+      text-transform: uppercase;
+      display: flex;
+      align-items: center;
+      gap: 8px;
+    }
 
-    .no-data { color: var(--muted); font-size: 0.9rem; text-align: center; padding: 30px 0; }
+    .dec-body {
+      padding: 16px 18px;
+    }
 
-    /* ── Error toast ── */
+    .dec-original {
+      font-size: 1rem;
+      font-weight: 500;
+      line-height: 1.65;
+      color: var(--text);
+      margin-bottom: 14px;
+      padding: 12px 14px;
+      border-radius: 8px;
+      background: rgba(255, 255, 255, 0.04);
+      border: 1px solid var(--border);
+      font-style: italic;
+    }
+
+    .dec-meta {
+      display: flex;
+      gap: 10px;
+      flex-wrap: wrap;
+      margin-bottom: 14px;
+    }
+
+    .meta-pill {
+      background: rgba(255, 255, 255, 0.06);
+      border-radius: 8px;
+      padding: 6px 14px;
+      font-size: 0.82rem;
+      border: 1px solid var(--border);
+    }
+
+    .meta-pill .label {
+      color: var(--text-muted);
+      font-size: 10px;
+      display: block;
+      margin-bottom: 2px;
+    }
+
+    .meta-pill strong {
+      color: var(--text);
+      font-weight: 700;
+    }
+
+    /* ─────────────────────────────────────
+       STATS CARD
+    ───────────────────────────────────── */
+    .stats-grid {
+      display: grid;
+      gap: 10px;
+      margin-top: 4px;
+    }
+
+    .stat-row {
+      display: flex;
+      align-items: center;
+      gap: 12px;
+    }
+
+    .stat-name {
+      min-width: 130px;
+      font-size: 0.82rem;
+      display: flex;
+      align-items: center;
+      gap: 8px;
+    }
+
+    .stat-bar-wrap {
+      flex: 1;
+      height: 10px;
+      background: rgba(255, 255, 255, 0.06);
+      border-radius: 99px;
+      overflow: hidden;
+    }
+
+    .stat-bar {
+      height: 100%;
+      border-radius: 99px;
+      transition: width 1.4s cubic-bezier(.22, 1, .36, 1);
+    }
+
+    .stat-count {
+      font-size: 0.8rem;
+      color: var(--text-muted);
+      width: 30px;
+      text-align: right;
+      font-weight: 600;
+    }
+
+    .no-data {
+      color: var(--text-muted);
+      font-size: 0.9rem;
+      text-align: center;
+      padding: 30px 0;
+    }
+
+    /* ─────────────────────────────────────
+       INFO / HOW IT WORKS PANEL
+    ───────────────────────────────────── */
+    .info-panel {
+      margin-top: 20px;
+      padding: 20px;
+      border-radius: 14px;
+      background: rgba(124, 58, 237, 0.06);
+      border: 1px solid rgba(124, 58, 237, 0.18);
+    }
+
+    .info-panel h4 {
+      font-size: 11px;
+      font-weight: 700;
+      color: var(--primary-lt);
+      text-transform: uppercase;
+      letter-spacing: 0.07em;
+      margin-bottom: 12px;
+    }
+
+    .info-row {
+      display: flex;
+      gap: 10px;
+      margin-bottom: 8px;
+    }
+
+    .info-row:last-child {
+      margin-bottom: 0;
+    }
+
+    .info-dot {
+      width: 6px;
+      height: 6px;
+      border-radius: 50%;
+      background: var(--primary-lt);
+      margin-top: 7px;
+      flex-shrink: 0;
+    }
+
+    .info-row p {
+      font-size: 0.82rem;
+      color: var(--text-muted);
+      line-height: 1.6;
+    }
+
+    .info-row p strong {
+      color: var(--text);
+    }
+
+    /* ─────────────────────────────────────
+       SAMPLE INPUTS
+    ───────────────────────────────────── */
+    .samples-section {
+      margin-top: 14px;
+    }
+
+    .samples-label {
+      font-size: 10px;
+      font-weight: 700;
+      color: var(--text-dim);
+      text-transform: uppercase;
+      letter-spacing: 0.07em;
+      margin-bottom: 8px;
+    }
+
+    .samples-list {
+      display: flex;
+      flex-direction: column;
+      gap: 6px;
+    }
+
+    .sample-btn {
+      background: rgba(255, 255, 255, 0.03);
+      border: 1px solid var(--border);
+      border-radius: 8px;
+      padding: 8px 12px;
+      font-size: 0.78rem;
+      color: var(--text-muted);
+      cursor: pointer;
+      text-align: left;
+      transition: all 0.2s;
+      font-family: 'Inter', sans-serif;
+    }
+
+    .sample-btn:hover {
+      border-color: var(--primary);
+      color: var(--text);
+      background: rgba(124, 58, 237, 0.07);
+    }
+
+    .sample-btn .tag {
+      font-size: 9px;
+      font-weight: 700;
+      border-radius: 4px;
+      padding: 1px 6px;
+      margin-left: 6px;
+      vertical-align: middle;
+    }
+
+    /* ─────────────────────────────────────
+       TOAST
+    ───────────────────────────────────── */
     #toast {
-      position: fixed; bottom: 30px; right: 30px; z-index: 999;
-      background: rgba(239,68,68,0.15); border: 1px solid rgba(239,68,68,0.4);
-      color: #fca5a5; border-radius: 12px; padding: 14px 20px;
-      font-size: 0.88rem; max-width: 340px;
-      backdrop-filter: blur(16px);
-      transform: translateY(80px); opacity: 0;
-      transition: all 0.4s cubic-bezier(.22,1,.36,1);
+      position: fixed;
+      bottom: 30px;
+      right: 30px;
+      z-index: 999;
+      background: rgba(239, 68, 68, 0.12);
+      border: 1px solid rgba(239, 68, 68, 0.35);
+      color: #fca5a5;
+      border-radius: 12px;
+      padding: 14px 20px;
+      font-size: 0.85rem;
+      max-width: 360px;
+      line-height: 1.5;
+      backdrop-filter: blur(18px);
+      transform: translateY(80px);
+      opacity: 0;
+      transition: all 0.4s cubic-bezier(.22, 1, .36, 1);
       pointer-events: none;
     }
-    #toast.show { transform: translateY(0); opacity: 1; }
+
+    #toast.show {
+      transform: translateY(0);
+      opacity: 1;
+    }
+
+    #toast.success {
+      background: rgba(16, 185, 129, 0.12);
+      border-color: rgba(16, 185, 129, 0.35);
+      color: #6ee7b7;
+    }
+
+    /* ─────────────────────────────────────
+       FOOTER
+    ───────────────────────────────────── */
+    footer {
+      text-align: center;
+      padding: 40px 0 0;
+      color: var(--text-dim);
+      font-size: 0.78rem;
+      line-height: 1.8;
+    }
+
+    footer a {
+      color: var(--primary-lt);
+      text-decoration: none;
+    }
+
+    footer a:hover {
+      text-decoration: underline;
+    }
 
     /* ── Animations ── */
     @keyframes fadeDown {
-      from { opacity: 0; transform: translateY(-16px); }
-      to   { opacity: 1; transform: translateY(0); }
+      from {
+        opacity: 0;
+        transform: translateY(-16px);
+      }
+
+      to {
+        opacity: 1;
+        transform: translateY(0);
+      }
     }
+
     @keyframes fadeUp {
-      from { opacity: 0; transform: translateY(16px); }
-      to   { opacity: 1; transform: translateY(0); }
+      from {
+        opacity: 0;
+        transform: translateY(16px);
+      }
+
+      to {
+        opacity: 1;
+        transform: translateY(0);
+      }
     }
-    @keyframes spin { to { transform: rotate(360deg); } }
 
-    /* ── Emotion colour map ── */
-    .e-joy      { color: #f59e0b; }
-    .e-sadness  { color: #60a5fa; }
-    .e-anger    { color: #f87171; }
-    .e-anxiety  { color: #a78bfa; }
-    .e-surprise { color: #34d399; }
-    .e-unknown  { color: var(--muted); }
+    @keyframes spin {
+      to {
+        transform: rotate(360deg);
+      }
+    }
 
-    .bar-joy      { background: linear-gradient(90deg,#f59e0b,#fbbf24); }
-    .bar-sadness  { background: linear-gradient(90deg,#3b82f6,#60a5fa); }
-    .bar-anger    { background: linear-gradient(90deg,#ef4444,#f87171); }
-    .bar-anxiety  { background: linear-gradient(90deg,#7c3aed,#a78bfa); }
-    .bar-surprise { background: linear-gradient(90deg,#059669,#34d399); }
-    .bar-default  { background: linear-gradient(90deg,var(--primary),var(--cyan)); }
+    @keyframes pulse-glow {
+
+      0%,
+      100% {
+        box-shadow: 0 0 0 0 rgba(124, 58, 237, 0);
+      }
+
+      50% {
+        box-shadow: 0 0 30px 6px rgba(124, 58, 237, 0.25);
+      }
+    }
+
+    .typing-cursor::after {
+      content: '|';
+      animation: blink 1s step-end infinite;
+    }
+
+    @keyframes blink {
+
+      0%,
+      100% {
+        opacity: 1
+      }
+
+      50% {
+        opacity: 0
+      }
+    }
+
+    /* Responsive tweaks */
+    @media (max-width: 600px) {
+      .how-row {
+        gap: 0;
+      }
+
+      .how-step p {
+        max-width: 70px;
+      }
+    }
   </style>
 </head>
+
 <body>
 
-<canvas id="particles"></canvas>
+  <canvas id="particles"></canvas>
 
-<div class="wrapper">
-  <!-- Header -->
-  <header>
-    <div class="logo-badge">
-      <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
-        <path d="M12 22s8-4 8-10V5l-8-3-8 3v7c0 6 8 10 8 10z"/>
-      </svg>
-      Emotion-Aware Encryption System
+  <div class="wrapper">
+
+    <!-- Nav -->
+    <nav>
+      <div class="nav-brand">
+        <svg class="shield-icon" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+          <path d="M12 22s8-4 8-10V5l-8-3-8 3v7c0 6 8 10 8 10z" />
+          <path d="M9 12l2 2 4-4" stroke-linecap="round" stroke-linejoin="round" />
+        </svg>
+        mini Emotion Cipher
+      </div>
+      <div class="nav-pill">AES-256 · NLP · Multi-Emotion</div>
+    </nav>
+
+    <!-- Hero -->
+    <section class="hero">
+
+      <h1>Feel. Encrypt.<br /><span class="accent">Protect.</span></h1>
+      <p class="hero-sub">
+        An intelligent system that detects the <strong>emotional signature</strong> of your text
+        and encrypts it using AES-256 — keeping words private while feelings stay readable.
+      </p>
+
+    </section>
+
+    <!-- How it works -->
+    <div class="how-row">
+      <div class="how-step">
+        <div class="how-icon ci-purple">✍️</div>
+        <strong>1. Input</strong>
+        <p>Type any emotional message</p>
+      </div>
+      <div class="how-arrow">→</div>
+      <div class="how-step">
+        <div class="how-icon ci-pink">🧠</div>
+        <strong>2. Detect</strong>
+        <p>NLP reads the emotion signature</p>
+      </div>
+      <div class="how-arrow">→</div>
+      <div class="how-step">
+        <div class="how-icon ci-cyan">🔐</div>
+        <strong>3. Encrypt</strong>
+        <p>AES-256 secures the text</p>
+      </div>
+      <div class="how-arrow">→</div>
+      <div class="how-step">
+        <div class="how-icon ci-green">🔓</div>
+        <strong>4. Decrypt</strong>
+        <p>Recover original text & emotion</p>
+      </div>
     </div>
-    <h1>Feel. Encrypt. Protect.</h1>
-    <p>NLP emotion intelligence meets AES-256 encryption. Your words are analyzed, understood, and secured — in one step.</p>
-  </header>
 
-  <div class="grid">
-    <!-- ── Card 1: Submit ── -->
-    <div class="card" style="animation-delay:0.1s">
-      <div class="card-header">
-        <div class="card-icon icon-purple">🧠</div>
-        <div>
-          <h2>Analyze & Encrypt</h2>
-          <p>Detect emotion and encrypt your text</p>
-        </div>
-      </div>
+    <!-- Main Grid -->
+    <div class="main-grid">
 
-      <textarea id="inputText" placeholder="Type how you're feeling… e.g. 'I feel anxious about tomorrow'" rows="5"></textarea>
-
-      <div class="btn-row">
-        <button id="submitBtn" class="btn btn-primary" onclick="handleSubmit()">
-          <span class="btn-label">✦ Analyze &amp; Encrypt</span>
-          <div class="spinner"></div>
-        </button>
-        <button class="btn btn-outline" onclick="document.getElementById('inputText').value='';hideResult('submitResult')">Clear</button>
-      </div>
-
-      <!-- Result -->
-      <div class="result-panel" id="submitResult">
-        <div class="emotion-row">
-          <div class="emotion-emoji" id="resEmoji">😐</div>
+      <!-- ── Card 1: Analyze & Encrypt ── -->
+      <div class="card" style="animation-delay:0.1s">
+        <div class="card-head">
+          <div class="card-icon ci-purple">🧠</div>
           <div>
-            <div class="emotion-label" id="resEmotion">—</div>
-            <div class="emotion-sublabel">Detected Emotion</div>
+            <h2>Analyze &amp; Encrypt</h2>
+            <p>Detect multi-emotion signature and encrypt your message with AES-256</p>
           </div>
         </div>
-        <div class="conf-section">
-          <div class="conf-label">
-            <span>Confidence</span>
-            <span id="resConf">—</span>
+
+        <label for="inputText">Your Message</label>
+        <textarea id="inputText"
+          placeholder="Type how you're feeling… e.g. 'I'm ecstatic about the new role, though a bit nervous about the challenges ahead.'"
+          rows="5" oninput="updateCharCount()" maxlength="2000"></textarea>
+        <div class="char-count" id="charCount">0 / 2000</div>
+
+        <div class="btn-row">
+          <button id="submitBtn" class="btn btn-primary" onclick="handleSubmit()">
+            <span class="btn-label">✦ Analyze &amp; Encrypt</span>
+            <div class="spinner"></div>
+          </button>
+          <button class="btn btn-outline" onclick="clearEncrypt()">✕ Clear</button>
+        </div>
+
+        <!-- Sample inputs -->
+        <div class="samples-section">
+          <div class="samples-label">Try a sample →</div>
+          <div class="samples-list">
+            <button class="sample-btn" onclick="setSample(0)">
+              "Feeling ecstatic about the AI research team, though a bit anxious about deadlines."
+              <span class="tag" style="background:rgba(245,158,11,0.2);color:#f59e0b;">Joy + Anxiety</span>
+            </button>
+            <button class="sample-btn" onclick="setSample(1)">
+              "I can't believe I failed again. So disappointed and frustrated."
+              <span class="tag" style="background:rgba(96,165,250,0.2);color:#60a5fa;">Sadness + Anger</span>
+            </button>
+            <button class="sample-btn" onclick="setSample(2)">
+              "Finally got the offer! I'm thrilled and can't wait to start!"
+              <span class="tag" style="background:rgba(251,146,60,0.2);color:#fb923c;">Joy + Excitement</span>
+            </button>
           </div>
-          <div class="conf-bar"><div class="conf-fill" id="confFill"></div></div>
         </div>
-        <div class="enc-section">
-          <div class="enc-label">
-            <span>🔐 Encrypted Payload (AES-256)</span>
-            <button class="copy-btn" onclick="copyEnc()">Copy</button>
+
+        <!-- Result panel -->
+        <div class="enc-result" id="encResult">
+          <!-- Signature banner -->
+          <div class="sig-banner" id="sigBanner">
+            <div id="sigEmojiStack" class="sig-emoji-stack"></div>
+            <div class="sig-info">
+              <div class="sig-label" id="sigLabel">—</div>
+              <div class="sig-sublabel">Detected Emotional Signature</div>
+            </div>
           </div>
-          <div class="enc-text" id="resEncText">—</div>
+          <!-- Multi-emotion bars -->
+          <div class="emotions-section">
+            <h4>Emotion Confidence Breakdown</h4>
+            <div id="emotionBars"></div>
+          </div>
+          <!-- Encrypted ciphertext -->
+          <div class="cipher-section">
+            <div class="cipher-label">
+              <span>🔐 Encrypted Payload (EMOSIG + AES-256)</span>
+              <span class="badge">SECURE</span>
+            </div>
+            <div class="cipher-text" id="cipherText">—</div>
+            <div style="margin-top:10px; display:flex; gap:8px; align-items:center; flex-wrap:wrap;">
+              <button class="copy-btn" id="copyBtn" onclick="copyEnc()">📋 Copy &amp; Auto-fill Decrypt</button>
+              <span style="font-size:10px;color:var(--text-dim);">Emotional signature embedded in prefix</span>
+            </div>
+          </div>
         </div>
       </div>
+
+      <!-- ── Card 2: Decrypt ── -->
+      <div class="card" style="animation-delay:0.2s">
+        <div class="card-head">
+          <div class="card-icon ci-cyan">🔑</div>
+          <div>
+            <h2>Decrypt Message</h2>
+            <p>Paste an encrypted token to recover the original text and emotion profile</p>
+          </div>
+        </div>
+
+        <label for="decryptInput">Encrypted Token</label>
+        <input type="text" id="decryptInput" placeholder="Paste encrypted EMOSIG token here…" />
+
+        <div class="btn-row">
+          <button id="decryptBtn" class="btn btn-cyan" onclick="handleDecrypt()">
+            <span class="btn-label">🔓 Decrypt</span>
+            <div class="spinner"></div>
+          </button>
+          <button class="btn btn-outline" onclick="clearDecrypt()">✕ Clear</button>
+        </div>
+
+        <!-- Decrypt result -->
+        <div class="dec-result" id="decResult">
+          <div class="dec-success-bar">✔ Decryption Successful</div>
+          <div class="dec-body">
+            <div class="dec-original" id="decOrigText">—</div>
+            <div class="dec-meta">
+              <div class="meta-pill">
+                <span class="label">Emotional Signature</span>
+                <strong id="decSignature">—</strong>
+              </div>
+              <div class="meta-pill">
+                <span class="label">Primary Emotion</span>
+                <strong id="decEmotion">—</strong>
+              </div>
+              <div class="meta-pill">
+                <span class="label">Confidence</span>
+                <strong id="decConf">—</strong>
+              </div>
+            </div>
+            <!-- Decrypted emotion bars -->
+            <div class="emotions-section" style="padding:0; border:none;">
+              <h4>All Detected Emotions</h4>
+              <div id="decEmotionBars"></div>
+            </div>
+          </div>
+        </div>
+
+        <!-- Info panel -->
+        <div class="info-panel">
+          <h4>🔬 How Empathy Encryption Works</h4>
+          <div class="info-row">
+            <div class="info-dot"></div>
+            <p><strong>Privacy:</strong> AES-256 Fernet encryption makes the original text completely unreadable without
+              the key.</p>
+          </div>
+          <div class="info-row">
+            <div class="info-dot"></div>
+            <p><strong>Empathy:</strong> The EMOSIG prefix encodes a hashed emotional signature — AI systems can
+              identify the emotion without reading the text.</p>
+          </div>
+          <div class="info-row">
+            <div class="info-dot"></div>
+            <p><strong>Multi-emotion:</strong> Our NLP model detects multiple overlapping emotions with confidence
+              scores, not just a single label.</p>
+          </div>
+        </div>
+      </div>
+
+      <!-- ── Card 3: Stats Dashboard ── -->
+      <div class="card full" style="animation-delay:0.3s">
+        <div class="card-head">
+          <div class="card-icon ci-green">📊</div>
+          <div>
+            <h2>Emotion Analytics Dashboard</h2>
+            <p>Live distribution of emotional signatures across all encrypted messages in the system</p>
+          </div>
+          <button class="btn btn-outline" style="margin-left:auto;padding:8px 16px;font-size:0.8rem"
+            onclick="loadStats()">↻ Refresh</button>
+        </div>
+        <div id="statsContainer" class="stats-grid">
+          <p class="no-data">No data yet — encrypt a message to get started.</p>
+        </div>
+      </div>
+
     </div>
 
-    <!-- ── Card 2: Decrypt ── -->
-    <div class="card" style="animation-delay:0.2s">
-      <div class="card-header">
-        <div class="card-icon icon-cyan">🔑</div>
-        <div>
-          <h2>Decrypt Message</h2>
-          <p>Paste an encrypted token to recover original text</p>
-        </div>
-      </div>
-
-      <input type="text" id="decryptInput" placeholder="Paste encrypted token here…" />
-
-      <div class="btn-row">
-        <button id="decryptBtn" class="btn btn-cyan" onclick="handleDecrypt()">
-          <span class="btn-label">🔓 Decrypt</span>
-          <div class="spinner"></div>
-        </button>
-        <button class="btn btn-outline" onclick="document.getElementById('decryptInput').value='';hideResult('decryptResult')">Clear</button>
-      </div>
-
-      <div class="decrypt-result" id="decryptResult">
-        <div class="orig" id="decOrigText">—</div>
-        <div class="decrypt-meta">
-          <div class="meta-chip"><span>Emotion:</span><strong id="decEmotion">—</strong></div>
-          <div class="meta-chip"><span>Confidence:</span><strong id="decConf">—</strong></div>
-        </div>
-      </div>
-    </div>
-
-    <!-- ── Card 3: Stats ── -->
-    <div class="card full" style="animation-delay:0.3s">
-      <div class="card-header">
-        <div class="card-icon icon-green">📊</div>
-        <div>
-          <h2>Emotion Distribution</h2>
-          <p>Live statistics from the encrypted message store</p>
-        </div>
-        <button class="btn btn-outline" style="margin-left:auto;padding:8px 16px;font-size:0.82rem" onclick="loadStats()">↻ Refresh</button>
-      </div>
-      <div id="statsContainer" class="stats-grid">
-        <p class="no-data">No data yet — submit a message to get started.</p>
-      </div>
-    </div>
+    <!-- Footer -->
+    <footer>
+      <p>mini Emotion Cipher · Built for <strong>UnsaidTalks Hackathon</strong> · AI + NLP + Encryption</p>
+      <p style="margin-top:6px;">
+        Powered by <a href="#">FastAPI</a> · AES-256 Fernet · TF-IDF + Logistic Regression NLP
+      </p>
+    </footer>
   </div>
-</div>
 
-<!-- Toast -->
-<div id="toast"></div>
+  <!-- Toast -->
+  <div id="toast"></div>
 
-<script>
-  /* ─────────────────────────────────────────
-     CONFIG — change if your server is different
-  ───────────────────────────────────────── */
-  const API = 'http://127.0.0.1:8000';
+  <script>
+    /* ─────────────────────────────────────────
+       CONFIG
+    ───────────────────────────────────────── */
+    const API = window.location.origin.includes('localhost') || window.location.origin.includes('127.0.0.1')
+      ? 'http://127.0.0.1:8000'
+      : window.location.origin;
 
-  /* ── Emotion map ── */
-  const EMOJI_MAP = {
-    joy:      '😄', sadness:  '😢', anger:   '😠',
-    anxiety:  '😰', surprise: '😲', unknown: '❓'
-  };
-  const emotionKey = e => Object.keys(EMOJI_MAP).find(k => e?.includes(k)) || 'unknown';
+    /* ── Sample texts ── */
+    const SAMPLES = [
+      "Feeling ecstatic about joining the new AI research team, though a bit anxious about the deadlines ahead.",
+      "I can't believe I failed that test again. I'm so disappointed and frustrated right now.",
+      "Finally got the job offer! I'm thrilled and can't wait to start this new journey."
+    ];
 
-  /* ── Utility ── */
-  function showToast(msg) {
-    const t = document.getElementById('toast');
-    t.textContent = msg; t.classList.add('show');
-    setTimeout(() => t.classList.remove('show'), 4000);
-  }
-  function setLoading(btnId, on) {
-    const b = document.getElementById(btnId);
-    b.classList.toggle('loading', on);
-    b.disabled = on;
-  }
-  function hideResult(id) {
-    document.getElementById(id).classList.remove('visible');
-  }
-
-  /* ── Submit & Encrypt ── */
-  async function handleSubmit() {
-    const text = document.getElementById('inputText').value.trim();
-    if (!text) { showToast('⚠ Please enter some text first.'); return; }
-    setLoading('submitBtn', true);
-    try {
-      const res = await fetch(`${API}/submit`, {
-        method: 'POST',
-        headers: { 'Content-Type': 'application/json' },
-        body: JSON.stringify({ text })
-      });
-      if (!res.ok) throw new Error((await res.json()).detail || 'Server error');
-      const data = await res.json();
-
-      // Populate result
-      const key = emotionKey(data.emotion);
-      document.getElementById('resEmoji').textContent    = EMOJI_MAP[key] || '❓';
-      document.getElementById('resEmotion').textContent  = data.emotion;
-      document.getElementById('resEmotion').className    = `emotion-label e-${key}`;
-      document.getElementById('resConf').textContent     = `${(data.confidence * 100).toFixed(1)}%`;
-      document.getElementById('resEncText').textContent  = data.encrypted_text;
-
-      // Animate confidence bar after short delay
-      document.getElementById('confFill').style.width = '0%';
-      requestAnimationFrame(() => {
-        setTimeout(() => {
-          document.getElementById('confFill').style.width = `${(data.confidence * 100).toFixed(1)}%`;
-        }, 80);
-      });
-
-      document.getElementById('submitResult').classList.add('visible');
-      loadStats(); // Auto-refresh stats
-    } catch (e) {
-      showToast(`❌ ${e.message}`);
-    } finally {
-      setLoading('submitBtn', false);
+    /* ── Utility ── */
+    let toastTimer;
+    function showToast(msg, type = 'error') {
+      const t = document.getElementById('toast');
+      t.textContent = msg;
+      t.className = type === 'success' ? 'show success' : 'show';
+      clearTimeout(toastTimer);
+      toastTimer = setTimeout(() => t.className = '', 4000);
     }
-  }
 
-  /* ── Decrypt ── */
-  async function handleDecrypt() {
-    const enc = document.getElementById('decryptInput').value.trim();
-    if (!enc) { showToast('⚠ Please paste an encrypted token.'); return; }
-    setLoading('decryptBtn', true);
-    try {
-      const res = await fetch(`${API}/decrypt`, {
-        method: 'POST',
-        headers: { 'Content-Type': 'application/json' },
-        body: JSON.stringify({ encrypted_text: enc })
-      });
-      if (!res.ok) throw new Error((await res.json()).detail || 'Decryption failed');
-      const data = await res.json();
-
-      document.getElementById('decOrigText').textContent = `"${data.original_text}"`;
-      document.getElementById('decEmotion').textContent  = data.emotion;
-      document.getElementById('decConf').textContent     = `${(data.confidence * 100).toFixed(1)}%`;
-      document.getElementById('decryptResult').classList.add('visible');
-    } catch (e) {
-      showToast(`❌ ${e.message}`);
-    } finally {
-      setLoading('decryptBtn', false);
+    function setLoading(btnId, on) {
+      const b = document.getElementById(btnId);
+      b.classList.toggle('loading', on);
+      b.disabled = on;
     }
-  }
 
-  /* ── Copy encrypted text ── */
-  function copyEnc() {
-    const txt = document.getElementById('resEncText').textContent;
-    navigator.clipboard.writeText(txt).then(() => {
-      // Also auto-fill the decrypt box for convenience
-      document.getElementById('decryptInput').value = txt;
-      const btn = document.querySelector('.copy-btn');
-      btn.textContent = '✓ Copied!';
-      setTimeout(() => btn.textContent = 'Copy', 2000);
-    });
-  }
+    function setSample(i) {
+      document.getElementById('inputText').value = SAMPLES[i];
+      updateCharCount();
+    }
 
-  /* ── Stats ── */
-  const BAR_COLORS = {
-    joy: 'bar-joy', sadness: 'bar-sadness', anger: 'bar-anger',
-    anxiety: 'bar-anxiety', surprise: 'bar-surprise'
-  };
+    function updateCharCount() {
+      const len = document.getElementById('inputText').value.length;
+      const el = document.getElementById('charCount');
+      el.textContent = `${len} / 2000`;
+      el.className = 'char-count' + (len > 1800 ? ' warn' : '');
+    }
 
-  async function loadStats() {
-    try {
-      const res = await fetch(`${API}/stats`);
-      if (!res.ok) throw new Error('Could not fetch stats');
-      const data = await res.json(); // [{emotion, count}]
-      const container = document.getElementById('statsContainer');
+    function clearEncrypt() {
+      document.getElementById('inputText').value = '';
+      document.getElementById('encResult').classList.remove('visible');
+      updateCharCount();
+    }
 
-      if (!data.length) {
-        container.innerHTML = '<p class="no-data">No data yet — submit a message to get started.</p>';
+    function clearDecrypt() {
+      document.getElementById('decryptInput').value = '';
+      document.getElementById('decResult').classList.remove('visible');
+    }
+
+    /* ── Build emotion bar rows (for encrypt or decrypt result) ── */
+    function renderEmotionBars(emotions, containerId) {
+      const container = document.getElementById(containerId);
+      if (!emotions || emotions.length === 0) {
+        container.innerHTML = '<p style="color:var(--text-muted);font-size:0.8rem">No emotion data.</p>';
         return;
       }
-      const max = Math.max(...data.map(d => d.count));
-      container.innerHTML = data.map(d => {
-        const key   = emotionKey(d.emotion);
-        const pct   = max ? ((d.count / max) * 100).toFixed(1) : 0;
-        const cls   = BAR_COLORS[key] || 'bar-default';
-        const emoji = EMOJI_MAP[key] || '❓';
+      container.innerHTML = emotions.map(e => {
+        const pct = (e.confidence * 100).toFixed(1);
         return `
-          <div class="stat-row">
-            <div class="stat-name">${emoji} ${d.emotion}</div>
-            <div class="stat-bar-wrap">
-              <div class="stat-bar ${cls}" style="width:0%" data-target="${pct}%"></div>
-            </div>
-            <div class="stat-count">${d.count}</div>
-          </div>`;
+        <div class="emo-bar-row" data-pct="${pct}">
+          <div class="emo-name">${e.emoji} <span style="text-transform:capitalize">${e.emotion}</span></div>
+          <div class="emo-bar-track">
+            <div class="emo-bar-fill" style="width:0%;background:${e.color}"></div>
+          </div>
+          <div class="emo-pct">${pct}%</div>
+        </div>`;
       }).join('');
 
-      // Animate bars
+      // Animate bars after render
       requestAnimationFrame(() => {
         setTimeout(() => {
-          document.querySelectorAll('.stat-bar').forEach(b => {
-            b.style.width = b.dataset.target;
+          container.querySelectorAll('.emo-bar-row').forEach(row => {
+            const fill = row.querySelector('.emo-bar-fill');
+            fill.style.width = row.dataset.pct + '%';
           });
         }, 80);
       });
-    } catch (e) {
-      // Silently ignore stats errors
     }
-  }
 
-  /* ── Particle canvas ── */
-  (function particles() {
-    const canvas = document.getElementById('particles');
-    const ctx    = canvas.getContext('2d');
-    let W, H, pts = [];
+    /* ── Submit & Encrypt ── */
+    async function handleSubmit() {
+      const text = document.getElementById('inputText').value.trim();
+      if (!text) { showToast('⚠ Please enter some text first.'); return; }
+      setLoading('submitBtn', true);
+      try {
+        const res = await fetch(`${API}/submit`, {
+          method: 'POST',
+          headers: { 'Content-Type': 'application/json' },
+          body: JSON.stringify({ text })
+        });
+        if (!res.ok) {
+          const err = await res.json();
+          throw new Error(err.detail || 'Server error');
+        }
+        const data = await res.json();
 
-    function resize() {
-      W = canvas.width  = window.innerWidth;
-      H = canvas.height = window.innerHeight;
+        // Signature banner
+        const sigBanner = document.getElementById('sigBanner');
+        const hue = getEmotionHue(data.primary_emotion);
+        sigBanner.style.background = `linear-gradient(135deg, rgba(${hue},0.15), rgba(6,182,212,0.08))`;
+
+        // Emoji stack (up to first 3 emotions)
+        const emojis = (data.all_emotions || []).slice(0, 3).map(e => e.emoji).join(' ');
+        document.getElementById('sigEmojiStack').textContent = emojis;
+        document.getElementById('sigLabel').textContent = data.emotional_signature;
+
+        // Emotion bars
+        renderEmotionBars(data.all_emotions, 'emotionBars');
+
+        // Cipher text
+        document.getElementById('cipherText').textContent = data.encrypted_text;
+
+        document.getElementById('encResult').classList.add('visible');
+        loadStats();
+        showToast('✦ Emotion detected & message encrypted!', 'success');
+      } catch (e) {
+        showToast(`❌ ${e.message}`);
+      } finally {
+        setLoading('submitBtn', false);
+      }
     }
-    window.addEventListener('resize', resize);
-    resize();
 
-    for (let i = 0; i < 80; i++) {
-      pts.push({
-        x: Math.random() * (typeof W !== 'undefined' ? W : 1200),
-        y: Math.random() * (typeof H !== 'undefined' ? H : 800),
-        r: Math.random() * 1.5 + 0.3,
-        dx: (Math.random() - 0.5) * 0.3,
-        dy: (Math.random() - 0.5) * 0.3,
-        alpha: Math.random() * 0.5 + 0.1
+    /* ── Decrypt ── */
+    async function handleDecrypt() {
+      const enc = document.getElementById('decryptInput').value.trim();
+      if (!enc) { showToast('⚠ Please paste an encrypted token.'); return; }
+      setLoading('decryptBtn', true);
+      try {
+        const res = await fetch(`${API}/decrypt`, {
+          method: 'POST',
+          headers: { 'Content-Type': 'application/json' },
+          body: JSON.stringify({ encrypted_text: enc })
+        });
+        if (!res.ok) {
+          const err = await res.json();
+          throw new Error(err.detail || 'Decryption failed');
+        }
+        const data = await res.json();
+
+        document.getElementById('decOrigText').textContent = `"${data.original_text}"`;
+        document.getElementById('decSignature').textContent = data.emotional_signature;
+        document.getElementById('decEmotion').textContent = `${data.primary_emoji} ${data.primary_emotion}`;
+        document.getElementById('decConf').textContent = `${(data.primary_confidence * 100).toFixed(1)}%`;
+
+        renderEmotionBars(data.all_emotions, 'decEmotionBars');
+
+        document.getElementById('decResult').classList.add('visible');
+        showToast('🔓 Message decrypted successfully!', 'success');
+      } catch (e) {
+        showToast(`❌ ${e.message}`);
+      } finally {
+        setLoading('decryptBtn', false);
+      }
+    }
+
+    /* ── Copy encrypted text ── */
+    function copyEnc() {
+      const txt = document.getElementById('cipherText').textContent;
+      if (!txt || txt === '—') return;
+      navigator.clipboard.writeText(txt).then(() => {
+        document.getElementById('decryptInput').value = txt;
+        const btn = document.getElementById('copyBtn');
+        btn.textContent = '✓ Copied & filled!';
+        setTimeout(() => btn.textContent = '📋 Copy & Auto-fill Decrypt', 2500);
       });
     }
 
-    function draw() {
-      ctx.clearRect(0, 0, W, H);
-      pts.forEach(p => {
-        p.x += p.dx; p.y += p.dy;
-        if (p.x < 0) p.x = W; if (p.x > W) p.x = 0;
-        if (p.y < 0) p.y = H; if (p.y > H) p.y = 0;
-        ctx.beginPath();
-        ctx.arc(p.x, p.y, p.r, 0, Math.PI * 2);
-        ctx.fillStyle = `rgba(124,58,237,${p.alpha})`;
-        ctx.fill();
-      });
-      requestAnimationFrame(draw);
-    }
-    draw();
-  })();
+    /* ── Stats ── */
+    const STAT_COLORS = {
+      joy: 'linear-gradient(90deg,#f59e0b,#fbbf24)',
+      sadness: 'linear-gradient(90deg,#3b82f6,#60a5fa)',
+      anger: 'linear-gradient(90deg,#ef4444,#f87171)',
+      anxiety: 'linear-gradient(90deg,#7c3aed,#a78bfa)',
+      fear: 'linear-gradient(90deg,#9333ea,#c084fc)',
+      surprise: 'linear-gradient(90deg,#059669,#34d399)',
+      disgust: 'linear-gradient(90deg,#16a34a,#4ade80)',
+      excitement: 'linear-gradient(90deg,#ea580c,#fb923c)',
+      love: 'linear-gradient(90deg,#be185d,#f472b6)',
+      neutral: 'linear-gradient(90deg,#475569,#94a3b8)',
+    };
 
-  /* ── Auto-load stats on page open ── */
-  window.addEventListener('load', loadStats);
-</script>
+    function getStatGradient(emotionSig) {
+      const first = emotionSig.toLowerCase().split(' + ')[0].trim();
+      return STAT_COLORS[first] || 'linear-gradient(90deg,var(--primary),var(--cyan))';
+    }
+
+    function getEmotionHue(emotion) {
+      const hues = {
+        joy: '245,158,11', sadness: '96,165,250', anger: '248,113,113',
+        anxiety: '167,139,250', fear: '192,132,252', surprise: '52,211,153',
+        disgust: '74,222,128', excitement: '251,146,60', love: '244,114,182', neutral: '148,163,184'
+      };
+      return hues[emotion] || '124,58,237';
+    }
+
+    async function loadStats() {
+      try {
+        const res = await fetch(`${API}/stats`);
+        if (!res.ok) throw new Error('Could not fetch stats');
+        const data = await res.json();
+        const container = document.getElementById('statsContainer');
+
+        if (!data.length) {
+          container.innerHTML = '<p class="no-data">No data yet — encrypt a message to get started.</p>';
+          return;
+        }
+        const max = Math.max(...data.map(d => d.count));
+        container.innerHTML = data.sort((a, b) => b.count - a.count).map(d => {
+          const pct = max ? ((d.count / max) * 100).toFixed(1) : 0;
+          const grad = getStatGradient(d.emotion);
+          return `
+          <div class="stat-row">
+            <div class="stat-name">${d.emoji} <span style="text-transform:capitalize">${d.emotion}</span></div>
+            <div class="stat-bar-wrap">
+              <div class="stat-bar" style="width:0%;background:${grad}" data-target="${pct}%"></div>
+            </div>
+            <div class="stat-count">${d.count}</div>
+          </div>`;
+        }).join('');
+
+        requestAnimationFrame(() => {
+          setTimeout(() => {
+            document.querySelectorAll('.stat-bar').forEach(b => {
+              b.style.width = b.dataset.target;
+            });
+          }, 80);
+        });
+      } catch (e) {
+        // Silently ignore
+      }
+    }
+
+    /* ── Particle canvas ── */
+    (function particles() {
+      const canvas = document.getElementById('particles');
+      const ctx = canvas.getContext('2d');
+      let W, H, pts = [];
+
+      function resize() {
+        W = canvas.width = window.innerWidth;
+        H = canvas.height = window.innerHeight;
+      }
+      window.addEventListener('resize', resize);
+      resize();
+
+      const COLORS = [
+        [124, 58, 237],   // purple
+        [6, 182, 212],    // cyan
+        [236, 72, 153],   // pink
+      ];
+
+      for (let i = 0; i < 90; i++) {
+        const c = COLORS[Math.floor(Math.random() * COLORS.length)];
+        pts.push({
+          x: Math.random() * 1400,
+          y: Math.random() * 900,
+          r: Math.random() * 1.6 + 0.3,
+          dx: (Math.random() - 0.5) * 0.25,
+          dy: (Math.random() - 0.5) * 0.25,
+          alpha: Math.random() * 0.45 + 0.08,
+          color: c,
+        });
+      }
+
+      function draw() {
+        ctx.clearRect(0, 0, W, H);
+        pts.forEach(p => {
+          p.x += p.dx; p.y += p.dy;
+          if (p.x < 0) p.x = W; if (p.x > W) p.x = 0;
+          if (p.y < 0) p.y = H; if (p.y > H) p.y = 0;
+          ctx.beginPath();
+          ctx.arc(p.x, p.y, p.r, 0, Math.PI * 2);
+          ctx.fillStyle = `rgba(${p.color[0]},${p.color[1]},${p.color[2]},${p.alpha})`;
+          ctx.fill();
+        });
+        requestAnimationFrame(draw);
+      }
+      draw();
+    })();
+
+    /* ── Auto-load stats and char count on page open ── */
+    window.addEventListener('load', () => {
+      loadStats();
+      updateCharCount();
+    });
+  </script>
 </body>
+
 </html>

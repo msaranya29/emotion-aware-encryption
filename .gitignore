@@ -4,9 +4,10 @@ venv1/
 .venv/
 env/
 
-# Environment variables (NEVER commit this!)
+# Environment variables — NEVER commit the real .env!
 .env
-.env.example
+
+# .env.example IS committed — it is a safe template with no real secrets
 
 # Python cache
 __pycache__/
@@ -14,7 +15,7 @@ __pycache__/
 *.pyo
 *.pyd
 
-# Database (ephemeral on cloud)
+# Database (ephemeral — recreated on startup)
 *.db
 
 # IDE
@@ -24,3 +25,7 @@ __pycache__/
 # OS
 .DS_Store
 Thumbs.db
+
+# Scratch / temp test scripts (not part of the project)
+test_api.py
+test_emotions.py
