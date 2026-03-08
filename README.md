@@ -93,7 +93,7 @@ copy .env.example .env   # Windows
 cp .env.example .env     # Linux/Mac
 
 # The .env already has a generated Fernet key:
-# ENCRYPTION_KEY="w9jFo_qhesDXhtYYFZcrkvXpClD_-hbkplMuYqUihUU="
+# ENCRYPTION_KEY=""
 # To generate your own:
 # python -c "from cryptography.fernet import Fernet; print(Fernet.generate_key().decode())"
 ```
