@@ -1,6 +1,6 @@
 # mini Emotion Cipher 🔐🧠
 
-> **Hackathon Project — UnsaidTalks · Theme: AI + NLP + Encryption**
+**Theme: AI + NLP + Encryption**
 
 A full-stack **Emotion-Aware Encryption System** that detects the emotional signature of any text message and encrypts it with AES-256 — keeping **words private** while **feelings stay readable**.
 
@@ -272,16 +272,4 @@ emotion-aware-encryption/
 
 ---
 
-## 🏆 Evaluation Alignment
 
-| Criterion | What We Built |
-|---|---|
-| **Impact (20%)** | End-to-end encrypt/decrypt with verifiable emotion preservation |
-| **Innovation (20%)** | EMOSIG format — hashed emotional metadata embedded IN the ciphertext |
-| **Technical Execution (20%)** | FastAPI + SQLAlchemy + Fernet + scikit-learn, clean modular code |
-| **User Experience (25%)** | Premium animated UI, multi-emotion bars, sample inputs, instant copy/paste |
-| **Presentation (15%)** | Demo video + live hosted app |
-
----
-
-*Built with ❤️ for UnsaidTalks Hackathon — "Where feelings stay readable, but words stay private."*
