@@ -215,12 +215,13 @@ if __name__ == "__main__":
     )
     
     # Train Logistic Regression with multi-class probability output
+    # Note: multi_class='multinomial' was removed in scikit-learn 1.5+;
+    # lbfgs solver handles multinomial classification by default.
     model = LogisticRegression(
         max_iter=2000,
         class_weight='balanced',
         C=1.0,
         solver='lbfgs',
-        multi_class='multinomial'
     )
     model.fit(X_train, y_train)
     
